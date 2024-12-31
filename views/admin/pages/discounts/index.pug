@@ -1,0 +1,60 @@
+extends ../../layouts/default.pug
+
+block main
+    h1(class="mb-4") Danh sách mã giảm giá
+
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        .row
+          .col-8
+          .col-4.text-right
+            a(
+              href=`/${prefixAdmin}/discounts/create`
+              class="btn btn-outline-success"
+            ) + Thêm mới
+            
+        table(
+          class="table table-hover table-sm"
+        )
+          thead
+            tr
+              th STT
+              th Tên mã
+              th Phần trăm (%)
+              th Ngày hết hạn
+              th Ngày tạo
+              th Trạng thái
+              th Hành động
+
+          tbody
+            each item, index in records
+              tr 
+                td #{index+1}
+                td #{item.name}
+                td #{item.amount}
+                td #{item.expire_date_format}
+                td #{item.createdAtFormat}
+
+                td
+                  if (item.status === "active")
+                    button(
+                      link=`/${prefixAdmin}/discounts/change-status/inactive/${item.id}`
+                      class="badge badge-success"
+                      button-change-status
+                    ) Hoạt động
+                  else
+                    button(
+                      link=`/${prefixAdmin}/discounts/change-status/active/${item.id}`
+                      class="badge badge-danger"
+                      button-change-status
+                    ) Dừng hoạt động
+                td
+                  a(
+                    class="btn btn-warning btn-sm ml-1"
+                    href=`/${prefixAdmin}/discounts/edit/${item.id}`
+                  ) Sửa
+                  button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete=`/${prefixAdmin}/discounts/delete/${item.id}`
+                  ) Xóa

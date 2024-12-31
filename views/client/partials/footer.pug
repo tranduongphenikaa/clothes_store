@@ -1,0 +1,75 @@
+footer
+  .container-fluid.bg-dark.text-secondary.mt-5.pt-5
+    .row.px-xl-5.pt-5
+      .col-lg-4.col-md-12.mb-5.pr-3.pr-xl-5
+        h5.text-secondary.text-uppercase.mb-4 Liên lạc
+        p.mb-4
+          | No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor. Rebum tempor no vero est magna amet no
+        p.mb-2
+          i.fa.fa-map-marker-alt.text-primary.mr-3
+          | #{setting.address}
+        p.mb-2
+          i.fa.fa-envelope.text-primary.mr-3
+          | #{setting.email}
+        p.mb-0
+          i.fa.fa-phone-alt.text-primary.mr-3
+          | #{setting.phone}
+      .col-lg-8.col-md-12
+        .row
+          .col-md-4.mb-5
+            h5.text-secondary.text-uppercase.mb-4 Truy cập nhanh
+            .d-flex.flex-column.justify-content-start
+              a.text-secondary.mb-2(href='/')
+                i.fa.fa-angle-right.mr-2
+                | Trang chủ
+              a.text-secondary.mb-2(href='/products')
+                i.fa.fa-angle-right.mr-2
+                | Sản phẩm
+              if(user)
+                a.text-secondary.mb-2(href='/wishlist')
+                  i.fa.fa-angle-right.mr-2
+                  | Yêu thích
+              a.text-secondary.mb-2(href='/cart')
+                i.fa.fa-angle-right.mr-2
+                | Giỏ hàng
+              a.text-secondary.mb-2(href='/checkout')
+                i.fa.fa-angle-right.mr-2
+                | Thanh toán
+              if(!user)
+                a.text-secondary.mb-2(href='/user/login')
+                  i.fa.fa-angle-right.mr-2
+                  | Đăng nhập
+                a.text-secondary.mb-2(href='/user/register')
+                  i.fa.fa-angle-right.mr-2
+                  | Đăng ký
+
+          .col-md-4.mb-5
+          .col-md-4.mb-5
+            h5.text-secondary.text-uppercase.mb-4 Newsletter
+            p Duo stet tempor ipsum sit amet magna ipsum tempor est
+            form(action='')
+              .input-group
+                input.form-control(type='text' placeholder='Your Email Address')
+                .input-group-append
+                  button.btn.btn-primary Sign Up
+            h6.text-secondary.text-uppercase.mt-4.mb-3 Theo dõi chúng tôi
+            .d-flex
+              a.btn.btn-primary.btn-square.mr-2(href='#')
+                i.fab.fa-twitter
+              a.btn.btn-primary.btn-square.mr-2(href='#')
+                i.fab.fa-facebook-f
+              a.btn.btn-primary.btn-square.mr-2(href='#')
+                i.fab.fa-linkedin-in
+              a.btn.btn-primary.btn-square(href='#')
+                i.fab.fa-instagram
+    .row.border-top.mx-xl-5.py-4(style='border-color: rgba(256, 256, 256, .1) !important;')
+      .col-md-6.px-xl-0
+        p.mb-md-0.text-center.text-md-left.text-secondary
+          br
+          | #{setting.copyright}
+      .col-md-6.px-xl-0.text-center.text-md-right
+        img.img-fluid(src='/images/payments.png' alt='')
+  // Footer End
+
+  a.btn.btn-primary.back-to-top(href='#' style="display: inline")
+    i.fa.fa-angle-double-up

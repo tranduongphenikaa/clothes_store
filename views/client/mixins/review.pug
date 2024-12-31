@@ -1,0 +1,28 @@
+mixin review
+    #MakeReviewModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5#exampleModalLabel.modal-title Review
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                form(action='/user/orders/make-review' method='POST')
+                    input#getProductId(type='hidden' name='productId' required='')
+                    input#getOrderId(type='hidden' name='orderId' required='')
+
+                    .modal-body(style='padding: 20px;')
+                        .form-group(style='margin-bottom: 15px;')
+                            label How many rating? *
+                            select.form-control(required='' name='rating')
+                                option(value='') Select
+                                option(value='1') 1
+                                option(value='2') 2
+                                option(value='3') 3
+                                option(value='4') 4
+                                option(value='5') 5
+                        .form-group
+                            label  Review
+                            textarea.form-control(required='' name='review') 
+                    .modal-footer
+                        button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                        button.btn.btn-primary(type='submit') Submit

@@ -1,0 +1,23 @@
+extends ../../layouts/default.pug
+
+block main
+  if (advert.title)
+    h1(class="mb-4") #{advert.title}
+
+  if (advert.description)
+    div(class="mb-4") Mô tả: !{advert.description}
+
+  if (advert.image)
+    div(class="mb-4")
+      img(
+        src=advert.image
+        style="width: 100px; height: auto"
+      )
+
+  if (advert.status)
+    div(class="mb-4")
+      span Trạng thái: 
+      if (advert.status === "active")
+        span(class="badge badge-success") Hoạt động
+      else
+        span(class="badge badge-danger") Dừng hoạt động

@@ -1,0 +1,39 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/sidebar.pug
+
+block main
+  .row.justify-content-center
+    .col-md-6.col-lg-5
+      +box-head(pageTitle)
+
+  .dashboard
+    .container
+      .row
+        +sidebar
+
+        .col-md-6.col-lg-5(style="margin-left: 40px")
+
+          if (user.avatar)
+            img(src=user.avatar width="120px" class="mb-3" style="border-radius: 50%; border: 2px solid #007bff; box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);")
+
+          if (user.fullName)
+            p Họ tên: <b>#{user.fullName}</b>
+
+          if (user.email)
+            p Email: <b>#{user.email}</b>
+
+          if (user.phone)
+            p Số điện thoại: <b>#{user.phone}</b>
+          
+          if (user.address)
+            p Địa chỉ: <b>#{user.address}</b>
+
+          p 
+            span Trạng thái: 
+            span
+              <b>#{user.status === "active" ? "Hoạt động": "Dừng hoạt động"}</b>
+
+          .mt-3
+            a.btn.btn-primary.btn-sm(href="/user/profile/edit") Sửa thông tin cá nhân
+            a.btn.btn-secondary.btn-sm(href="/user/profile/changePassword" class="ml-2") Đổi mật khẩu

@@ -1,0 +1,99 @@
+extends ../../layouts/default.pug
+
+block main
+  h1 Trang tổng quan
+
+  .row.mt-4
+    .col-12
+      .card.mb-4
+        .card-header Thông tin tài khoản
+        .card-body
+          if(account.avatar)
+            img(
+              src=account.avatar
+              style="height: 100px;margin-bottom: 15px;"
+            )
+          if(account.fullName)
+            p Họ tên: <b>#{account.fullName}</b>
+          if(account.email)
+            p Email: <b>#{account.email}</b>
+          if(account.phone)
+            p Số điện thoại: <b>#{account.phone}</b>
+          if(role.title)
+            p Phân quyền: <b>#{role.title}</b>
+
+    .col-6
+      .card.mb-4
+        .card-header Đơn hàng
+        .card-body
+          p Hôm nay : <b>#{statistic.orders.todayOrders}</b>
+          p Tổng cộng : <b>#{statistic.orders.totalOrders}</b>
+
+    .col-6
+      .card.mb-4
+        .card-header Doanh thu
+        .card-body
+          p Hôm nay : <b>#{statistic.amounts.todayAmounts.toLocaleString()} ₫</b>
+          p Tổng cộng:  <b>#{statistic.amounts.totalAmounts.toLocaleString()} ₫</b>
+
+    .col-6
+      .card.mb-4
+        .card-header Khách hàng
+        .card-body
+          p Hôm nay : <b>#{statistic.amounts.todayCustomer}</b>
+          p Tổng cộng : <b>#{statistic.amounts.totalCustomer}</b>
+
+  .col-12.mt-4
+    canvas#revenueChart(width="400" height="200")
+
+  script(src="https://cdn.jsdelivr.net/npm/chart.js")
+  script.
+    const monthlyRevenue = !{JSON.stringify(statistic.amounts.monthlyRevenue)};
+    
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(ctx, {
+      type: 'bar', 
+      data: {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'], // Nhãn cho các tháng
+        datasets: [{
+          label: 'Doanh thu hàng tháng (₫)', 
+          data: monthlyRevenue, 
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.2)', 
+            'rgba(153, 102, 255, 0.2)', 
+            'rgba(255, 159, 64, 0.2)', 
+            'rgba(255, 99, 132, 0.2)', 
+            'rgba(54, 162, 235, 0.2)', 
+            'rgba(255, 206, 86, 0.2)', 
+            'rgba(75, 192, 192, 0.2)', 
+            'rgba(153, 102, 255, 0.2)', 
+            'rgba(255, 159, 64, 0.2)', 
+            'rgba(255, 99, 132, 0.2)', 
+            'rgba(54, 162, 235, 0.2)', 
+            'rgba(255, 206, 86, 0.2)' 
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)', 
+            'rgba(153, 102, 255, 1)', 
+            'rgba(255, 159, 64, 1)', 
+            'rgba(255, 99, 132, 1)', 
+            'rgba(54, 162, 235, 1)', 
+            'rgba(255, 206, 86, 1)', 
+            'rgba(75, 192, 192, 1)', 
+            'rgba(153, 102, 255, 1)', 
+            'rgba(255, 159, 64, 1)', 
+            'rgba(255, 99, 132, 1)', 
+            'rgba(54, 162, 235, 1)', 
+            'rgba(255, 206, 86, 1)' 
+          ],
+          borderWidth: 1 
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true 
+          }
+        }
+      }
+    });

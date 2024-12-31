@@ -1,0 +1,88 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main
+  if(role.permissions.includes("blogs-category_view"))
+    h1(class="mb-4") Danh mục bài viết
+
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        .row
+          .col-8
+          .col-4.text-right
+            if(role.permissions.includes("blogs-category_create"))
+              a(
+                href=`/${prefixAdmin}/blogs-category/create`
+                class="btn btn-outline-success"
+              ) + Thêm mới
+
+        table(
+          class="table table-hover table-sm"
+        )
+          thead
+            tr
+              th STT
+              th Tiêu đề
+              th Hình ảnh
+              th Vị trí
+              th Tạo bởi
+              th Cập nhật
+              if(role.permissions.includes("blogs-category_edit"))
+                th Trạng thái
+              th Hành động
+
+          tbody
+            if(records.length > 0)
+              each item, index in records
+                tr
+                  td #{index + 1}
+                  td #{item.title}
+                  td
+                    img(
+                      src=item.thumbnail
+                      alt=item.title
+                      width="80px"
+                      height="auto"
+                    )
+                  td #{item.position}
+                  td
+                    div #{item.createdByFullName}
+                    div #{item.createdAtFormat}
+                  td
+                    div #{item.updatedByFullName}
+                    div #{item.updatedAtFormat}
+                  if(role.permissions.includes("blogs-category_edit"))
+                    td
+                      if(item.status == "active")
+                        button(
+                          link=`/${prefixAdmin}/blogs-category/change-status/inactive/${item.id}`
+                          class="badge badge-success"
+                          button-change-status
+                        ) Hoạt động
+                      else
+                        button(
+                          link=`/${prefixAdmin}/blogs-category/change-status/active/${item.id}`
+                          class="badge badge-danger"
+                          button-change-status
+                        ) Dừng hoạt động
+                  td
+                    a(
+                      class="btn btn-secondary btn-sm"
+                      href=`/${prefixAdmin}/blogs-category/detail/${item.id}`
+                    ) Chi tiết
+                    if(role.permissions.includes("blogs-category_edit"))
+                      a(
+                        class="btn btn-warning btn-sm ml-1"
+                        href=`/${prefixAdmin}/blogs-category/edit/${item.id}`
+                      ) Sửa
+                    if(role.permissions.includes("blogs-category_delete"))
+                      button(
+                        class="btn btn-danger btn-sm ml-1"
+                        button-delete=`/${prefixAdmin}/blogs-category/delete/${item.id}`
+                      ) Xóa
+            else
+              tr
+                td(colspan="4" class="text-center") Chưa có danh mục bài viết nào được tạo.
+    
+    +pagination(pagination)

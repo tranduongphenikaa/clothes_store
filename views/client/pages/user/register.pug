@@ -1,0 +1,53 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .container.my-5
+    .row.justify-content-center
+      .col-md-6.col-lg-5
+        +box-head(pageTitle)
+        .card.shadow-sm
+          .card-body
+            form(
+              action="/user/register"
+              method="POST"
+            )
+              .form-group.mb-3
+                label(for="fullName") Họ và tên
+                input(
+                  type="text"
+                  class="form-control"
+                  id="fullName"
+                  name="fullName"
+                  placeholder="Nhập họ tên"
+                  required
+                )
+              .form-group.mb-3
+                label(for="email") Email
+                input(
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="Nhập email"
+                  required
+                )
+              .form-group.mb-3.position-relative
+                label(for="password" class="form-label") Mật khẩu
+                
+                input#passwordInput.form-control(
+                  type="password"
+                  name="password"
+                  placeholder="Nhập mật khẩu"
+                  passInput
+                  required
+                )
+                span.eye-icon(
+                  id="togglePassword" togglePassword
+                )
+                  i.fa.fa-eye(icon)
+              .form-group.mb-4
+                button(
+                  type="submit"
+                  class="btn btn-primary btn-block"
+                ) Đăng ký

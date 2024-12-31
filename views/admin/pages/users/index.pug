@@ -1,0 +1,68 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main
+  if(role.permissions.includes("users_view"))
+    h1(class="mb-4") Quản lý khách hàng
+    
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        
+        table.table.table-hover.table-sm
+          thead
+            tr
+              th STT
+              th Avatar
+              th Họ tên
+              th Email
+              th Số điện thoại
+              th Địa chỉ
+              if(role.permissions.includes("users_edit"))
+                th Trạng thái
+              th Ngày tạo
+              th Hành động
+
+          tbody
+            each item, index in records
+              tr 
+                td #{index+1}
+                td
+                  img(
+                    src=item.avatar
+                    alt=item.fullName
+                    width="100px"
+                    height="auto"
+                  )
+                td #{item.fullName}
+                td #{item.email}
+                td #{item.phone}
+                td #{item.address}
+                if(role.permissions.includes("users_edit"))
+                  td
+                      if (item.status === "active")
+                        button(
+                          link=`/${prefixAdmin}/users/change-status/inactive/${item.id}`
+                          class="badge badge-success"
+                          button-change-status
+                        ) Hoạt động
+                      else
+                        button(
+                          link=`/${prefixAdmin}/users/change-status/active/${item.id}`
+                          class="badge badge-danger"
+                          button-change-status
+                        ) Dừng hoạt động
+                    
+                td #{item.createdAtFormat}
+                td
+                  a(
+                    class="btn btn-info btn-sm"
+                    href=`/${prefixAdmin}/users/detail/${item.id}`
+                  ) Chi tiết
+                  if(role.permissions.includes("users_delete"))
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete=`/${prefixAdmin}/users/delete/${item.id}`
+                    ) Xóa
+    
+    +pagination(pagination)

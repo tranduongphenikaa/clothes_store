@@ -1,0 +1,18 @@
+mixin sub-menu(items)
+  each item in items
+    if(item.children)
+      .nav-item.dropdown.dropright
+        .d-flex.align-items-center.justify-content-between
+          a.nav-link(href=`/products/${item.slug}`)= item.title
+          a.dropdown-toggle.sub-menu(data-toggle='dropdown' role='button')
+            i.fa.fa-angle-right.float-right.mt-1
+        .dropdown-menu.position-absolute.rounded-0.border-0.m-0
+          each itemChildren in item.children
+            if(itemChildren.children)
+              .nav-item
+                a.nav-link(href=`/products/${itemChildren.slug}`)= itemChildren.title
+                +sub-menu(itemChildren.children)
+            else
+              a.dropdown-item(href=`/products/${itemChildren.slug}`)= itemChildren.title
+    else
+      a.nav-item.nav-link(href=`/products/${item.slug}`)= item.title

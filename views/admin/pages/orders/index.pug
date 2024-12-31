@@ -1,0 +1,60 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main
+  if(role.permissions.includes("orders_view"))
+    h1(class="mb-4") Quản lý đơn hàng
+
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        
+        table.table.table-hover.table-sm
+          thead
+            tr
+              th STT
+              th Họ tên
+              th Số điện thoại
+              th Địa chỉ
+              th Thanh toán
+              th Tổng tiền
+              if(role.permissions.includes("orders_edit"))
+                th Trạng thái
+              th Ngày tạo
+              th Hành động
+
+          tbody
+            each item, index in records
+              tr 
+                td #{index+1}
+                td #{item.userInfo.fullName}
+                td #{item.userInfo.phone}
+                td #{item.userInfo.address}
+                td #{item.payment_method}
+                td #{item.totalPrice.toLocaleString()} ₫
+                if(role.permissions.includes("orders_edit"))
+                  td
+                    select(
+                      class="form-control"
+                      style="width: 180px;"
+                      data-order-id = item.id
+                      orderStatus = `/${prefixAdmin}/orders/changeStatus/${item.id}`
+                    )
+                      option(value="Đang xử lý" selected=item.status === "Đang xử lý") Đang xử lý
+                      option(value="Đang giao hàng" selected=item.status === "Đang giao hàng") Đang giao hàng
+                      option(value="Giao thành công" selected=item.status === "Giao thành công") Giao thành công
+                      option(value="Hoãn" selected=item.status === "Hoãn") Hoãn
+                    
+                td #{item.createdAtFormat}
+                td
+                  a(
+                    class="btn btn-info btn-sm"
+                    href=`/${prefixAdmin}/orders/detail/${item.id}`
+                  ) Chi tiết
+                  if(role.permissions.includes("orders_delete"))
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete=`/${prefixAdmin}/orders/delete/${item.id}`
+                    ) Xóa
+    
+    +pagination(pagination)

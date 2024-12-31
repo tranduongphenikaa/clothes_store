@@ -1,0 +1,81 @@
+include ../mixins/sub-menu.pug
+
+header
+  // Topbar Start
+  .container-fluid
+    .row.align-items-center.bg-light.py-3.px-xl-5.d-none.d-lg-flex
+      .col-lg-4
+        a.text-decoration-none(href='/')
+          img(src=setting.logo, alt="Logo" style="width: 150px")
+      .col-lg-4.col-6.text-left
+        form(
+          action="/search"
+          method="GET"
+        ) 
+          div(class="form-group d-flex mb-0")
+            input(
+              type="text"
+              placeholder="Nhập từ khóa..."
+              class="form-control"
+              name="keyword"
+              value=keyword
+            )
+            button(
+              type="submit"
+              class="btn btn-primary"
+            ) Tìm
+
+      .col-lg-4.col-6.text-right
+        if(user)
+          button.btn.btn-sm.btn-light.dropdown-toggle(type='button' data-toggle='dropdown') #{user.fullName}
+          .dropdown-menu.dropdown-menu-right
+            a.dropdown-item(href="/user/dashboard") Thông tin cá nhân
+            a.dropdown-item(href="/user/logout") Đăng xuất
+
+        else
+          button.btn.btn-sm.btn-light.dropdown-toggle(type='button' data-toggle='dropdown') Tài khoản
+          .dropdown-menu.dropdown-menu-right
+            a.dropdown-item(href="/user/login") Đăng nhập
+            a.dropdown-item(href="/user/register") Đăng ký
+
+  // Topbar End
+  // Navbar Start
+  .container-fluid.bg-dark.mb-30
+    .row.px-xl-5
+      // Danh mục
+      .col-lg-3.d-none.d-lg-block
+        a.btn.d-flex.align-items-center.justify-content-between.bg-primary.w-100(data-toggle='collapse' href='#navbar-vertical' style='height: 65px; padding: 0 30px;')
+          h6.text-dark.m-0
+            i.fa.fa-bars.mr-2
+            | Danh mục
+          i.fa.fa-angle-down.text-dark
+        nav#navbar-vertical.collapse.position-absolute.navbar.navbar-vertical.navbar-light.align-items-start.p-0.bg-light(style='width: calc(100% - 30px); z-index: 999;')
+          .navbar-nav.w-100
+            if(layoutCategoryProducts)
+              +sub-menu(layoutCategoryProducts)
+      //  Hết Danh mục
+
+      .col-lg-9
+        nav.navbar.navbar-expand-lg.bg-dark.navbar-dark.py-3.py-lg-0.px-0
+          a.text-decoration-none.d-block.d-lg-none(href='/')
+          button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarCollapse')
+            span.navbar-toggler-icon
+          #navbarCollapse.collapse.navbar-collapse.justify-content-between
+            .navbar-nav.mr-auto.py-0
+              a.nav-item.nav-link(href='/' navbar) Trang chủ
+              a.nav-item.nav-link(href='/products' navbar) Sản phẩm
+          
+              a.nav-item.nav-link(href='/cart' navbar) Giỏ hàng
+              a.nav-item.nav-link(href='/checkout' navbar) Thanh toán
+              a.nav-item.nav-link(href='/blogs' navbar) Bài viết
+              
+            .navbar-nav.ml-auto.py-0.d-none.d-lg-block
+              if(user)
+                a.btn.px-0(href='/wishlist')
+                  i.fas.fa-heart.text-primary
+                span.badge.text-secondary.border.border-secondary.rounded-circle(style='padding-bottom: 2px;') #{wishlistTotal}
+              a.btn.px-0.ml-3(href='/cart')
+                i.fas.fa-shopping-cart.text-primary
+                span.badge.text-secondary.border.border-secondary.rounded-circle(style='padding-bottom: 2px;') #{cartTotal}
+  // Navbar End
+.clear

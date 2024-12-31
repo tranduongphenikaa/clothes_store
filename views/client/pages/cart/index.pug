@@ -1,0 +1,77 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  // Breadcrumb Start
+  .container-fluid
+    .row.px-xl-5
+      .col-12
+        nav.breadcrumb.bg-light.mb-30
+          a.breadcrumb-item.text-dark(href='/') Trang chủ
+          span.breadcrumb-item.active Giỏ hàng
+  // Breadcrumb End
+
+  // Cart Start
+  .container-fluid
+    .row.px-xl-5
+      .col-lg-8.table-responsive.mb-5
+        table.table.table-light.table-borderless.table-hover.text-center.mb-0(cart)
+          thead.thead-dark
+            tr
+              th Ảnh
+              th Tên
+              th Giá
+              th Size | Số lượng
+              th Tổng tiền
+              th Hành động
+
+          tbody.align-middle
+            if (cartDetail.products.length > 0)
+              each product, index in cartDetail.products
+                tr
+                  td.align-middle
+                    img(src=product.productInfo.thumbnail[0] alt=product.productInfo.title width="80px")
+                  td.align-middle
+                    a(href=`/products/detail/${product.productInfo.slug}`, style="color: #000") #{product.productInfo.title}
+                  td.align-middle #{product.productInfo.priceNew.toLocaleString()} ₫
+                  td.align-middle
+                    .input-group.quantity.mx-auto(style='width: 125px;')
+                      each size in product.size
+                        .d-flex.align-items-center.mb-2
+                          
+                          select.form-control(name="size" style='margin-right: 7px; width: 67px' product-id=product.productId=product.productId data-size-name=size.name)
+                            option(value="S" selected = (size.name == 'S')) S
+                            option(value="M" selected = (size.name == 'M') ) M
+                            option(value="L" selected = (size.name == 'L')) L
+                            option(value="XL" selected = (size.name == 'XL')) XL
+                            
+                          input.form-control(type='number' value=size.quantity min="1" max=product.stock name="quantity" product-id=product.productId=product.productId data-size-name=size.name)
+                  td.align-middle #{product.totalPrice.toLocaleString()} ₫
+                  td.align-middle
+                    a(href=`/cart/delete/${product.productId}`, class="btn btn-danger") Xóa
+            else
+              p Chưa có sản phẩm nào trong giỏ hàng.
+
+      .col-lg-4
+        form.mb-30(action='/cart/apply-discount' method="POST" apply-discount)
+          .input-group
+            input.form-control.border-0.p-4(type='text' placeholder='Mã giảm giá' name="discountCode")
+            .input-group-append
+              button.btn.btn-primary(type='submit' style="font-weight: bold") Áp dụng
+              
+        h5.section-title.position-relative.text-uppercase.mb-3
+          span.bg-secondary.pr-3 Đơn hàng
+        .bg-light.p-30.mb-5
+          .border-bottom.pb-2
+            .d-flex.justify-content-between.mb-3
+              h6 Tổng phụ
+              h6 #{cartDetail.totalPrice.toLocaleString()} ₫
+            .d-flex.justify-content-between
+              h6.font-weight-medium Chiết khấu
+              h6#discountAmount.font-weight-medium 0 ₫
+          .pt-2
+            .d-flex.justify-content-between.mt-2
+              h5 Tổng tiền
+              h5#totalPrice #{cartDetail.totalPrice.toLocaleString()} ₫
+            a(href="/checkout").btn.btn-block.btn-primary.font-weight-bold.my-3.py-3 Tiến hành thanh toán
+  // Cart End

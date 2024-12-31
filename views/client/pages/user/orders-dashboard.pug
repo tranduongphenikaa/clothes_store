@@ -1,0 +1,33 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/sidebar.pug
+
+block main
+  .row.justify-content-center
+    .col-md-6.col-lg-5
+      +box-head(pageTitle)
+
+  .dashboard
+    .container
+      .row
+        +sidebar
+
+        .col-md-8.col-lg-9
+          .tab-content
+            table.table.table-striped
+              thead
+                tr
+                  th #
+                  th Tổng tiền (VND)
+                  th Trạng thái
+                  th Ngày tạo
+                  th Hành động
+              tbody
+                each order, index in orders
+                  tr
+                    td #{index + 1}
+                    td #{order.totalPrice.toLocaleString()} ₫
+                    td #{order.status}
+                    td #{order.createdAtFormat}
+                    td
+                      a.btn.btn-primary(href=`/user/orders/detail/${order.id}`) Chi tiết

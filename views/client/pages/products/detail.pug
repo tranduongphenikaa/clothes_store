@@ -1,0 +1,139 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  // Breadcrumb Start
+  .container-fluid
+    .row.px-xl-5
+      .col-12
+        nav.breadcrumb.bg-light.mb-30
+          a.breadcrumb-item.text-dark(href='/') Trang chủ
+          a.breadcrumb-item.text-dark(href='/products') Sản phẩm
+          span.breadcrumb-item.active #{product.title}
+  // Breadcrumb End
+  // Shop Detail Start
+  .container-fluid.pb-5.product-detail
+    .row.px-xl-5
+      .col-lg-5.mb-30
+        .inner-images
+          div(class="swiper product-detail-images")
+            .swiper-wrapper
+              each image in product.thumbnail
+                .swiper-slide
+                  .inner-image
+                    img(src=image)
+            .swiper-button-next
+            .swiper-button-prev
+
+      .col-lg-7.h-auto.mb-30
+        .h-100.bg-light.p-30
+          h3 #{product.title}
+          .d-flex.mb-3
+            .text-primary.mr-2
+              each star in [1, 2, 3, 4, 5] 
+                if (star <= reviews.ratingAvg)
+                  i.fas.fa-star 
+                else
+                  i.far.fa-star 
+            small.pt-1 (#{reviews.length} Reviews)
+          h3.font-weight-semi-bold.mb-4(style="color: red") #{product.priceNew.toLocaleString()} ₫
+          p.mb-4
+            | Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit
+            | clita ea. Sanc ipsum et, labore clita lorem magna duo dolor no sea
+            | Nonumy
+          .d-flex.mb-3
+            strong.text-dark.mr-3 Kích cỡ:
+            form
+              for size, index in product.size
+                .custom-control.custom-radio.custom-control-inline
+                  input.custom-control-input(type='radio' name='size-radio' id=`size-${index}` value=size required)
+                  label.custom-control-label(for=`size-${index}`) #{size}
+
+          .d-flex.align-items-center.mb-4.pt-2
+              form.d-flex(
+                action=`/cart/add/${product.id}`
+                method="POST"
+              )
+                input#hidden-size(type="hidden" name="size" value="")
+                .input-group.quantity.mr-3(style='width: 50px;')
+                  input.form-control(type='number' value='1' min="1" max=product.stock name="quantity")
+                button(type="submit").btn.btn-primary.px-3
+                  i.fa.fa-shopping-cart.mr-1
+                  |  Thêm vào
+                  |                             giỏ hàng
+
+          .d-flex.pt-2
+            strong.text-dark.mr-2 Chia sẻ: 
+            .d-inline-flex
+              a.text-dark.px-2(href='')
+                i.fab.fa-facebook-f
+              a.text-dark.px-2(href='')
+                i.fab.fa-twitter
+              a.text-dark.px-2(href='')
+                i.fab.fa-linkedin-in
+              a.text-dark.px-2(href='')
+                i.fab.fa-pinterest
+    .row.px-xl-5
+      .col
+        .bg-light.p-30
+          .nav.nav-tabs.mb-4
+            a.nav-item.nav-link.text-dark.active(data-toggle='tab' href='#tab-pane-1') Mô tả
+            a.nav-item.nav-link.text-dark(data-toggle='tab' href='#tab-pane-3') Reviews (#{reviews.length})
+          .tab-content
+            #tab-pane-1.tab-pane.fade.show.active
+              h4.mb-3 Mô tả sản phẩm
+              p !{product.description}
+
+            #tab-pane-3.tab-pane.fade
+              .row
+                each review in reviews
+                  .col-md-6
+                    .media.mb-4
+                      img.img-fluid.mr-3.mt-1(src=review.image alt='Image' style='width: 45px;')
+                      .media-body
+                        h6
+                          | #{review.fullName}
+                          small
+                            | 
+                            i #{review.createdAtFormat}
+                        .text-primary.mb-2
+                          each star in [1, 2, 3, 4, 5] 
+                            if (star <= review.rating)
+                              i.fas.fa-star 
+                            else
+                              i.far.fa-star 
+                        p
+                          | #{review.review}
+                
+  // Shop Detail End
+  // Products Start
+  if(similarProduct.length > 0)
+    .container-fluid.py-5
+      h2.section-title.position-relative.text-uppercase.mx-xl-5.mb-4
+        span.bg-secondary.pr-3 Sản phẩm tương tự
+      .row.px-xl-5
+        .col
+          .owl-carousel.related-carousel
+            each item in similarProduct
+              .product-item.bg-light
+                .product-img.position-relative.overflow-hidden
+                  img.img-fluid.w-100(src=item.thumbnail[0], alt=item.title)
+                  .product-action
+                    a.btn.btn-outline-dark.btn-square(href=`/products/detail/${item.slug}`)
+                      i.fa.fa-search
+                .text-center.py-4
+                  a.h6.text-decoration-none.text-truncate(href=`/products/detail/${item.slug}`) #{item.title}
+                  .d-flex.align-items-center.justify-content-center.mt-2
+                    h5(style="color: red") #{item.priceNew.toLocaleString()} ₫
+                    if(item.discountPercentage != 0)
+                      h6.text-muted.ml-2
+                        del(style="color: green") #{item.price.toLocaleString()} ₫
+                  .d-flex.align-items-center.justify-content-center.mb-1
+                    each star in [1, 2, 3, 4, 5] 
+                      if (star <= item.ratingAvg)
+                        small.fas.fa-star.text-primary.mr-1
+                      else
+                        small.far.fa-star.text-primary.mr-1
+                    small (#{item.reviewsCount})
+            
+    // Products End

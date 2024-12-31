@@ -1,0 +1,120 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .page-content
+    .container
+      .row
+        .col-lg-9
+          article.entry.single-entry
+            figure.entry-media
+              img(src=blog.thumbnail alt=blog.title)
+
+            .entry-body
+              .entry-meta
+                span #{blog.createdAtFormat} 
+                span.meta-separator | #{comments.length} Bình luận 
+                
+                if(blog.category)
+                  span.meta-separator | 
+                  a(href=`/blogs/${blog.category.slug}`) #{blog.category.title}
+                  |
+                br
+                br
+                h3.mb-3 #{blog.title}
+              .entry-content.editor-content
+                | !{blog.description}
+              
+              
+          .related-posts
+            h4.title Bài viết liên quan
+            div.entry-container
+              each item in similarBlogs
+                article.entry.entry-grid(style="width: 230px; margin-right: 25px")
+                  figure.entry-media
+                    a(href=`/blogs/detail/${item.slug}`)
+                      img(src=item.thumbnail, alt=item.title, width="100%", height="auto", style="bject-fit: cover;aspect-ratio: 4/3")
+
+                  .entry-body
+                    .entry-meta
+                      span #{item.createdAtFormat} 
+                      span.meta-separator | #{item.comments} Bình luận 
+
+                    h5.entry-title
+                      a(href=`/blogs/detail/${item.slug}` style="color: #333") #{item.title}
+                    
+                    if(item.category)
+                      .entry-cats
+                        | Danh mục : 
+                        a(href=`/blogs/${item.category.slug}`) #{item.category.title}
+                        |
+          br
+          .comments
+            h5.title Bình luận (#{comments.length})
+
+            ul
+              each item in comments
+                li
+                  .comment
+                    figure.comment-media
+                      a(href='')
+                        img(src=item.userInfo.avatar alt=item.userInfo.fullName)
+                    .comment-body
+                      .comment-user
+                        h4
+                          a(href='') #{item.userInfo.fullName}
+                        span.comment-date #{item.createdAtFormat}
+                      // End .comment-user
+                      .comment-content
+                        p
+                          | !{item.comment}
+                    // End .comment-content
+                  // End .comment-body
+                // End .comment
+          // End .comments
+
+          .reply
+            .heading
+              h5.title Bình luận ở đây
+
+              if(!user)
+                p.title-desc Để bình luận thì bạn cân đăng nhập tài khoản *
+            
+            if(user)
+              form(action="/blogs/comment" method="POST")
+                input#getBlogId(type='hidden' name='blogId' required='' value=blog.id)
+
+                label.sr-only(for='reply-message') Bình luận
+                textarea#reply-message.form-control(name='message' cols='30' rows='4' required='' placeholder='Bình luận *')
+
+                button.btn.btn-outline-primary-2.blogCommentSubmit(type='submit')
+                  span GỬI 
+                  i.fas.fa-arrow-right(style="margin-left: 8px;")
+          // End .reply
+        // End .col-lg-9
+
+
+        aside.col-lg-3
+          .sidebar
+            .widget.widget-cats
+              h5.widget-title Danh mục
+
+              ul(style="list-style: none; padding: 0; margin: 0 0 10px 0")
+                each item in allCategory
+                  li
+                    a(href=`/blogs/${item.slug}`, style="color: red; font-weight: 300;")
+                      | #{item.title}
+
+            .widget
+              h5.widget-title Gần đây
+
+              ul.posts-list(style="list-style: none; padding: 0; margin: 0 0 10px 0")
+                each item in recentBlogs
+                  li
+                    figure.recentBlogImg
+                      a(href=`/blogs/detail/${item.slug}`)
+                        img(src=item.thumbnail alt=item.title, style="width: 150px; height: auto")
+                    div.recentBlog
+                      span #{item.createdAtFormat}
+                      p
+                        a(href=`/blogs/detail/${item.slug}`) #{item.title}

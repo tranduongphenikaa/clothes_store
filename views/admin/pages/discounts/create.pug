@@ -1,0 +1,64 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Thêm mới mã giảm giá
+
+  form(
+    action=`/${prefixAdmin}/discounts/create`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="name")  Tên mã *
+      input(
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        required
+      )
+    div(class="form-group")
+      label(for="amount") Phần trăm *
+      input(
+        type="number"
+        class="form-control"
+        id="amount"
+        name="amount"
+        required
+      )
+
+    div(class="form-group")
+      label(for="expire_date") Ngày hết hạn *
+      input(
+        style="width: 200px"
+        type="date"
+        class="form-control"
+        id="expire_date"
+        name="expire_date"
+        required
+      )
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới

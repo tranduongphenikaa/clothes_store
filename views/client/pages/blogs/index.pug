@@ -1,0 +1,52 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/pagination.pug
+
+block main
+  //- Đường dẫn 
+  .container-fluid
+    .row.px-xl-5
+      .col-12
+        nav.breadcrumb.bg-light.mb-30
+          a.breadcrumb-item.text-dark(href='/') Trang chủ
+          a.breadcrumb-item.text-dark(href='/blogs') Bài viết
+          if(slug)
+            a.breadcrumb-item.text-dark(href=`/products/${slug}`) #{category.title}
+          if(filterCategory && filterCategory != "")
+            a.breadcrumb-item.text-dark(href="") #{filterCategory}
+  //- Hết Đường dẫn
+
+
+  .container-fluid
+    .row.px-xl-5
+      .col-lg-3.col-md-4
+        
+        if(!slug)
+          // Danh mục
+          h5.section-title.position-relative.text-uppercase.mb-3
+            span.bg-secondary.pr-3 Danh mục
+          .bg-light.p-4.mb-30
+            form
+              .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
+                a(href="/blogs")
+                  label(for='categories-all' style="color: red; cursor: pointer") Tất cả
+              for category in categories
+                .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
+                  label(for='' filter-categories = `${category.slug}` style="color: #6C757D; cursor: pointer" ) #{category.title}
+          // Hết Danh mục        
+
+      .col-lg-9.col-md-8
+        .row.pb-3
+          each item in blogs
+            .col-lg-4.col-md-6.col-sm-6.pb-1
+              .product-item.bg-light.mb-4
+                .product-img.position-relative.overflow-hidden
+                  img.img-fluid.w-100(src=item.thumbnail, alt=item.title, style="aspect-ratio: 16/9; object-fit: cover; width=80px;height=auto")
+                  .product-action
+                    a.btn.btn-outline-dark.btn-square(href=`/blogs/detail/${item.slug}`)
+                      i.fa.fa-search
+                .text-center.py-4
+                  a.h6.text-decoration-none.text-truncate(href=`/blogs/detail/${item.slug}` style="margin: 10px; display: block; white-space: normal; overflow: hidden; text-overflow: ellipsis;") #{item.title}
+
+          .col-12
+            +pagination(pagination)

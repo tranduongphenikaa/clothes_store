@@ -1,0 +1,71 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/sidebar.pug
+include ../../mixins/review.pug
+
+block main
+  .row.justify-content-center
+    .col-md-6.col-lg-5
+      +box-head(pageTitle)
+
+  .dashboard
+    .container
+      .row
+        +sidebar
+
+        .col-md-8.col-lg-9
+          .tab-content
+            .col-md-8.col-lg-9
+                .tab-content
+                    .form-group
+                        label Họ và tên : 
+                            span(style="font-weight: normal;") #{order.userInfo.fullName}
+                    .form-group
+                        label Địa chỉ : 
+                            span(style="font-weight: normal;") #{order.userInfo.address}
+
+                    .form-group
+                        label Điện thoại : 
+                            span(style="font-weight: normal;") #{order.userInfo.phone}
+                    .form-group
+                        label Email : 
+                            span(style="font-weight: normal;") #{user.email}
+                    .form-group
+                        label Tổng tiền (VND) : 
+                            span(style="font-weight: normal;") #{order.totalPrice.toLocaleString()} ₫
+                    .form-group
+                        label Status : 
+                            span(style="font-weight: normal;") #{order.status}
+
+                    .form-group
+                        label Ngày tạo : 
+                            span(style="font-weight: normal;") #{order.createdAtFormat}
+
+                .card(style="width: 900px")
+                    .card-header()
+                        h5.card-title Chi tiết sản phẩm
+                    .card-body.p-0(style="overflow: auto;")
+                        table.table.table-striped
+                            thead
+                                tr
+                                    th Hình ảnh
+                                    th Tên sản phẩm
+                                    th Số lượng
+                                    th Giá
+                                    th Tổng tiền (VND)
+                            tbody
+                                each product in products
+                                    tr
+                                        td
+                                            img(style="width: 100px; height: 100px", src=product.image)
+                                        td(style="max-width: 250px;")
+                                            a(href=`/products/detail/${product.slug}` style="color: blue") #{product.title}
+                                            br
+                                            if(order.status == 'Giao thành công')
+                                                button.btn.btn-primary.MakeReview(data-toggle="modal" data-target="#MakeReviewModal" data-product-id=product.productId data-order-id=order.id data-rating=product.rating data-review=product.review) Review
+
+                                        td #{product.quantity}
+                                        td #{product.priceNew.toLocaleString()} ₫
+                                        td #{product.totalPrice.toLocaleString()} ₫
+                
+                +review

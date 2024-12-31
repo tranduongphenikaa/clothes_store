@@ -1,0 +1,56 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/sidebar.pug
+
+block main
+  .row.justify-content-center
+    .col-md-6.col-lg-5
+      +box-head(pageTitle)
+
+  .dashboard
+    .container
+      .row
+        +sidebar
+
+        .col-md-8.col-lg-9
+          .tab-content
+            .row
+              .col-md-3
+                .box-btn(style='margin-bottom: 20px;')
+                  div(style='font-size: 20px; font-weight: bold;') #{myOrders.TotalOrder}
+                  div(style='font-size: 16px;') Total Order
+
+              .col-md-3(style='margin-bottom: 20px;')
+                .box-btn
+                  div(style='font-size: 20px; font-weight: bold;') #{myOrders.TotalTodayOrder}
+                  div(style='font-size: 16px;') Today Order
+
+              .col-md-3(style='margin-bottom: 20px;')
+                .box-btn
+                  div(style='font-size: 20px; font-weight: bold;') #{myOrders.TotalAmount.toLocaleString()} ₫
+                  div(style='font-size: 16px;') Total Amount
+
+              .col-md-3(style='margin-bottom: 20px;')
+                .box-btn
+                  div(style='font-size: 20px; font-weight: bold;') #{myOrders.TotalTodayAmount.toLocaleString()} ₫
+                  div(style='font-size: 16px;') Today Amount
+
+              .col-md-3(style='margin-bottom: 20px;')
+                .box-btn
+                  div(style='font-size: 20px; font-weight: bold;') #{myOrders.TotalPending}
+                  div(style='font-size: 16px;') Pending Order
+
+              .col-md-3(style='margin-bottom: 20px;')
+                .box-btn
+                  div(style='font-size: 20px; font-weight: bold;') #{myOrders.TotalInProgress}
+                  div(style='font-size: 16px;') In Progress Order
+
+              .col-md-3(style='margin-bottom: 20px;')
+                .box-btn
+                  div(style='font-size: 20px; font-weight: bold;') #{myOrders.TotalCompleted}
+                  div(style='font-size: 16px;') Completed Orders
+
+              .col-md-3(style='margin-bottom: 20px;')
+                .box-btn
+                  div(style='font-size: 20px; font-weight: bold;') #{myOrders.TotalCanceled}
+                  div(style='font-size: 16px;') Canceled Orders
